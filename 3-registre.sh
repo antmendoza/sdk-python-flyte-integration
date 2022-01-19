@@ -9,7 +9,7 @@ do
 done
 
 if [ -z "${version}" ]; then
-  echo "No version set, run the script with -v <version>"
+  echo "No deployment version set, run the script with -v <version>"
   exit 0
 fi
 

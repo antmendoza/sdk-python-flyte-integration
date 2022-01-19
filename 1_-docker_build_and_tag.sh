@@ -1,7 +1,9 @@
 #!/bin/bash
 
+set -e
 
 TAG=flyte:v1
+
 
 while getopts t: flag
 do
@@ -14,7 +16,6 @@ do
 done
 
 
-echo "Using tag=${TAG}"
+flytectl sandbox exec -- docker build . --tag ${TAG}
 
-
-pyflyte --pkgs flyte.workflows package --image ${TAG}  --force #--fast
+echo "Docker image built with tag ${TAG}. You can use this image to run pyflyte package."
