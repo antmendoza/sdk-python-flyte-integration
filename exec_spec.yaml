@@ -1,0 +1,7 @@
+iamRoleARN: ""
+inputs: {}
+kubeServiceAcct: ""
+targetDomain: ""
+targetProject: ""
+version: v1
+workflow: flyte.workflows.example.my_wf
