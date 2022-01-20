@@ -1,0 +1,8 @@
+iamRoleARN: ""
+inputs:
+  wf: {}
+kubeServiceAcct: ""
+targetDomain: ""
+targetProject: ""
+version: v5
+workflow: flyte.workflows.serverlessworflow.swf
