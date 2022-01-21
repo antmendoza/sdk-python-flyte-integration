@@ -7,14 +7,15 @@ def execute_swf(wf: dict) -> dict:
     """
     Calls the required tasks and returns the final result"""
 
-    swf = Workflow.from_source(str(wf))
+    swf: Workflow = Workflow.from_source(str(wf))
 
     result = {'id': swf.id}
 
     # looping through the string s1
-    for i in range(len(str(wf))):
+    for i in swf.states:
+        # i.is_operation_state()
         pass
-        #result['mynewkey' + str(i)] = i
+        # result['mynewkey' + str(i)] = i
 
     return result
 
