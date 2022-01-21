@@ -1,23 +1,28 @@
 from flytekit import dynamic, workflow
+from serverlessworkflow.sdk.inject_state import InjectState
 from serverlessworkflow.sdk.workflow import Workflow
 
 
 @dynamic
 def execute_swf(wf: dict) -> dict:
     """
-    Calls the required tasks and returns the final result"""
+    Execute the required states and returns the final result"""
 
-    swf: Workflow = Workflow.from_source(str(wf))
+    wf_object: Workflow = Workflow.from_source(str(wf))
 
-    result = {'id': swf.id}
+    result = {}
 
-    # looping through the string s1
-    for i in swf.states:
-        # i.is_operation_state()
-        pass
-        # result['mynewkey' + str(i)] = i
+    state: State
+    for state in wf_object.states:
+        if state.type == 'inject':
+            result.update(inject_state(state))
 
     return result
+
+
+def inject_state(state: InjectState):
+    inject_result = state.data
+    return inject_result
 
 
 @workflow
@@ -25,28 +30,5 @@ def swf(wf: dict) -> dict:
     """
     Calls the dynamic workflow and returns the result"""
 
-    # sending two strings to the workflow
     return execute_swf(wf=wf)
 
-
-if __name__ == "__main__":
-    print(swf(wf=
-    {
-        "id": "helloworld",
-        "version": "1.0",
-        "specVersion": "0.8",
-        "name": "Hello World Workflow",
-        "description": "Inject Hello World",
-        "start": "Hello State",
-        "states": [
-            {
-                "name": "Hello State",
-                "type": "inject",
-                "data": {
-                    "result": "Hello World!"
-                },
-                "end": True
-            }
-        ]
-    }
-    ))
