@@ -2,5 +2,5 @@
 
 This is a PCO to demonstrate how to run execute Serverless Workflow Specification DLSs into Flyte workflow engine.
 
-For now is a WIP project and the full Serverless Workflow Specification is not supported yet.
+This is a WIP project and the full Serverless Workflow Specification is not supported yet.
 
