@@ -1,1 +1,2 @@
 flytekit>=0.20.0
+-e git+https://github.com/antmendoza/sdk-python.git@2200d098eb9945177e511789402c863200885e46#egg=serverlessworkflow.sdk

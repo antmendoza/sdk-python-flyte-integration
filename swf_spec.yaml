@@ -1,8 +1,25 @@
 iamRoleARN: ""
 inputs:
-  wf: {}
+  wf: {
+        "id": "helloworld",
+        "version": "1.0",
+        "specVersion": "0.8",
+        "name": "Hello World Workflow",
+        "description": "Inject Hello World",
+        "start": "Hello State",
+        "states": [
+            {
+                "name": "Hello State",
+                "type": "inject",
+                "data": {
+                    "result": "Hello World!"
+                },
+                "end": True
+            }
+        ]
+    }
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
-version: v5
+version: v1
 workflow: flyte.workflows.serverlessworflow.swf

@@ -8,6 +8,9 @@ ENV PYTHONPATH /root
 
 RUN apt-get update && apt-get install -y build-essential
 
+RUN  apt-get install -y --no-install-recommends git
+
+
 # Install the AWS cli separately to prevent issues with boto being written over
 RUN pip3 install awscli
 # Similarly, if you're using GCP be sure to update this command to install gsutil
