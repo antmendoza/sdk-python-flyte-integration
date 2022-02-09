@@ -1,4 +1,4 @@
-#import importlib
+import importlib
 
 from flytekit import dynamic, workflow
 from serverlessworkflow.sdk.function import Function
@@ -9,12 +9,11 @@ from serverlessworkflow.sdk.workflow import Workflow
 
 
 def operation_state(state: OperationState):
- #   module = importlib.import_module('flyte.workflows.tasks.custom_taks')
- #   my_class = getattr(module, 'Task')
- ##   my_instance = my_class()
-  #  return my_instance.task4()
+    module = importlib.import_module('flyte.src.tasks.custom_taks')
+    my_class = getattr(module, 'Task')
+    my_instance = my_class()
+    return my_instance.task4()
 
-    return {}
 
 def inject_state(state: InjectState):
     inject_result = state.data

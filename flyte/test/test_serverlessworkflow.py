@@ -2,7 +2,7 @@ import unittest
 
 from jsonpath_ng import parse
 
-from flyte.src.mainlekan import swf
+from flyte.src.main import swf
 
 
 class TestWorkflow(unittest.TestCase):
