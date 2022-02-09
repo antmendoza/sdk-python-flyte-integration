@@ -11,6 +11,7 @@ from serverlessworkflow.sdk.workflow import Workflow
 from flyte.src.context import Context
 from flyte.src.custom_function import CustomFunction
 from flyte.src.function_factory import FunctionFactory
+from flyte.src.tools.jq import JQ
 
 
 def operation_state(context: Context, state: OperationState):
@@ -20,7 +21,12 @@ def operation_state(context: Context, state: OperationState):
     for action in state.actions:
         ref_name = action.functionRef.refName
         function: CustomFunction = FunctionFactory(context.functions, ref_name).build()
-        result.update(function.invoke())
+        function_invocation = function.invoke()
+
+        if action.actionDataFilter:
+            function_invocation = JQ(action.actionDataFilter.results).execute(function_invocation)
+
+        result.update(function_invocation)
 
     return result
 

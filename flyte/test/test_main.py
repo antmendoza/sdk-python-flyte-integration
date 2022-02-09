@@ -60,7 +60,7 @@ class TestWorkflow(unittest.TestCase):
                                 }
                             },
                             "actionDataFilter": {
-                                "results": "${ .greeting }"
+                                "results": "${ {greeting: .greeting} }"
                             }
                         }
                     ],
