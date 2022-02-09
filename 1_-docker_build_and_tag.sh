@@ -9,7 +9,7 @@ while getopts t: flag
 do
     case "${flag}" in
         t) TAG=${OPTARG};;
-        h) echo "Usage: ${0} [-h|[-t <tag>]]"
+        *) echo "Usage: ${0} [-h|[-t <tag>]]"
            echo "  t = TAG of the build image"
            exit 1;;
     esac

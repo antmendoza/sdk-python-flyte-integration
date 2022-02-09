@@ -1,3 +1,4 @@
 flytekit>=0.20.0
 jsonpath-ng
 /Users/antmendoza/personal/sdk-python
+jq
