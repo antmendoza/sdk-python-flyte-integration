@@ -7,7 +7,7 @@ from flyte.src.main import swf
 
 class TestWorkflow(unittest.TestCase):
 
-    def test_swf(self):
+    def test_helloworld(self):
         result = swf(wf={
             "id": "helloworld",
             "version": "1.0",
@@ -43,7 +43,7 @@ class TestWorkflow(unittest.TestCase):
             "functions": [
                 {
                     "name": "greetingFunction",
-                    "operation": "flyte.serverlessworkflow.tasks.custom_taks.Task#task1",
+                    "operation": "flyte.serverlessworkflow.tasks.custom_taks#task1",
                     "type": "custom"
                 }
             ],
