@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from jsonpath_ng import parse
 
-from flyte.serverlessworkflow.src.json.json_path import JsonPath
+from flyte.src.json_parser.json_path import JsonPath
 
 
 class TestJsonPath(TestCase):
