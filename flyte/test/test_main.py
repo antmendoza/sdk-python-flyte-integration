@@ -55,9 +55,7 @@ class TestWorkflow(unittest.TestCase):
                         {
                             "functionRef": {
                                 "refName": "greetingFunction",
-                                "arguments": {
-                                    "name": "${ .person.name }"
-                                }
+                                "arguments": "${ {name: .person.name } }"
                             },
                             "actionDataFilter": {
                                 "results": "${ {greeting: .greeting} }"

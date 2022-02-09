@@ -22,8 +22,12 @@ def operation_state(context: Context, state: OperationState, data: dict):
         ref_name = action.functionRef.refName
         function: CustomFunction = FunctionFactory(context.functions, ref_name).build()
 
+        arguments = None
+        if action.functionRef.arguments:
+            arguments = JQ(action.functionRef.arguments).execute(data)
 
-        function_invocation = function.invoke(data)
+        function_invocation = function.invoke(arguments)
+
 
         if action.actionDataFilter:
             function_invocation = JQ(action.actionDataFilter.results).execute(function_invocation)

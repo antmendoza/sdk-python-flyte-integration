@@ -1,4 +1,4 @@
 def greeting(data: dict):
     return {
-        "greeting": "Welcome to Serverless Workflow, John!"
+        "greeting": f"Welcome to Serverless Workflow, {data['name']}!"
     }
