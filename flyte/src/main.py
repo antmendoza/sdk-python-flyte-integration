@@ -3,8 +3,8 @@ from __future__ import annotations
 import importlib
 
 from flytekit import dynamic, workflow
-from serverlessworkflow.sdk.function import Function
 from serverlessworkflow.sdk.action import Action
+from serverlessworkflow.sdk.function import Function
 from serverlessworkflow.sdk.inject_state import InjectState
 from serverlessworkflow.sdk.operation_state import OperationState
 from serverlessworkflow.sdk.state import State
@@ -13,24 +13,23 @@ from serverlessworkflow.sdk.workflow import Workflow
 from flyte.src.context import Context
 
 
-class ExecutableFunction:
-
-    def __init__(self, function: Function):
+class CustomFunction:
+    def __init__(self, function: Function, ref_name: str):
         self.function = function
-
-    def execute(self, data: dict):
-        pass
+        self.ref_name = ref_name
 
 
-class ResolveFunction:
+class FunctionFactory:
     def __init__(self, functions: (str | [Function]), ref_name: str):
         self.functions = functions
         self.ref_name = ref_name
+        self.function: Function = next(x for x in self.functions if x.name == self.ref_name)
 
-    @property
-    def function(self) -> ExecutableFunction:
-        function: Function = next(x for x in self.functions if x.name == self.ref_name)
-        return ExecutableFunction(function)
+    def build(self):
+        if self.function.type == "custom":
+            return CustomFunction(self.function, self.ref_name).function
+
+        raise RuntimeError(f'Type ${self.function.type} not supported')
 
 
 def operation_state(context: Context, state: OperationState):
@@ -38,7 +37,7 @@ def operation_state(context: Context, state: OperationState):
     for action in state.actions:
         print(action)
         ref_name = action.functionRef.refName
-        function: ExecutableFunction = ResolveFunction(context.functions, ref_name).function
+        function: CustomFunction = FunctionFactory(context.functions, ref_name).build()
         print(function)
 
     module = importlib.import_module('flyte.src.tasks.custom_taks')
