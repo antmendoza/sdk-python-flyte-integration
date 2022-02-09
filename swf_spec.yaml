@@ -1,25 +1,41 @@
 iamRoleARN: ""
 inputs:
   wf: {
-        "id": "helloworld",
-        "version": "1.0",
-        "specVersion": "0.8",
-        "name": "Hello World Workflow",
-        "description": "Inject Hello World",
-        "start": "Hello State",
-        "states": [
-            {
-                "name": "Hello State",
-                "type": "inject",
-                "data": {
-                    "result": "Hello World!"
-                },
-                "end": True
-            }
-        ]
-    }
+"id": "greeting",
+"version": "1.0",
+"specVersion": "0.8",
+"name": "Greeting Workflow",
+"description": "Greet Someone",
+"start": "Greet",
+"functions": [
+  {
+     "name": "greetingFunction",
+     "operation": "file://myapis/greetingapis.json#greeting"
+  }
+],
+"states":[
+  {
+     "name":"Greet",
+     "type":"operation",
+     "actions":[
+        {
+           "functionRef": {
+              "refName": "greetingFunction",
+              "arguments": {
+                "name": "${ .person.name }"
+              }
+           },
+           "actionDataFilter": {
+              "results": "${ .greeting }"
+           }
+        }
+     ],
+     "end": True
+  }
+]
+}
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
 version: v1
-workflow: flyte.workflows.serverlessworflow.swf
+workflow: flyte.serverlessworkflow.src.main.swf

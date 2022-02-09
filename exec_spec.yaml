@@ -1,9 +1,0 @@
-iamRoleARN: ""
-inputs:
-  s1: "jespin"
-  s2: "mendoza"
-kubeServiceAcct: ""
-targetDomain: ""
-targetProject: ""
-version: v1
-workflow: flyte.workflows.example2.wf
