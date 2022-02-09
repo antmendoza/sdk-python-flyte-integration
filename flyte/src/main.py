@@ -14,14 +14,16 @@ from flyte.src.function_factory import FunctionFactory
 from flyte.src.tools.jq import JQ
 
 
-def operation_state(context: Context, state: OperationState):
+def operation_state(context: Context, state: OperationState, data: dict):
     result = {}
 
     action: Action
     for action in state.actions:
         ref_name = action.functionRef.refName
         function: CustomFunction = FunctionFactory(context.functions, ref_name).build()
-        function_invocation = function.invoke()
+
+
+        function_invocation = function.invoke(data)
 
         if action.actionDataFilter:
             function_invocation = JQ(action.actionDataFilter.results).execute(function_invocation)
@@ -31,7 +33,7 @@ def operation_state(context: Context, state: OperationState):
     return result
 
 
-def inject_state(context: Context, state: InjectState):
+def inject_state(context: Context, state: InjectState, data: dict):
     inject_result = state.data
     return inject_result
 
@@ -52,9 +54,9 @@ def execute_swf(wf: dict, data: dict) -> dict:
     if wf_object.states:
         for state in wf_object.states:
             if state.type == 'inject':
-                result.update(inject_state(context, state))
+                result.update(inject_state(context, state, data))
             if state.type == 'operation':
-                result.update(operation_state(context, state))
+                result.update(operation_state(context, state, data))
 
     return result
 
