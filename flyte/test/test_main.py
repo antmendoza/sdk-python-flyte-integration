@@ -43,7 +43,7 @@ class TestWorkflow(unittest.TestCase):
             "functions": [
                 {
                     "name": "greetingFunction",
-                    "operation": "flyte.serverlessworkflow.tasks.custom_taks#task1",
+                    "operation": "flyte.src.tasks.custom_taks#greeting",
                     "type": "custom"
                 }
             ],
@@ -82,9 +82,3 @@ class TestWorkflow(unittest.TestCase):
         }
 
         self.assertEqual(expected, result)
-        json_data = data
-        jsonpath_expression = parse('$.person.name')
-        match = jsonpath_expression.find(json_data)
-
-        print(match)
-        print("id value is", match[0].value)
