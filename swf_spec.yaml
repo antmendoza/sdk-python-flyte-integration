@@ -1,41 +1,45 @@
 iamRoleARN: ""
 inputs:
   wf: {
-"id": "greeting",
-"version": "1.0",
-"specVersion": "0.8",
-"name": "Greeting Workflow",
-"description": "Greet Someone",
-"start": "Greet",
-"functions": [
-  {
-     "name": "greetingFunction",
-     "operation": "file://myapis/greetingapis.json#greeting"
-  }
-],
-"states":[
-  {
-     "name":"Greet",
-     "type":"operation",
-     "actions":[
-        {
-           "functionRef": {
-              "refName": "greetingFunction",
-              "arguments": {
-                "name": "${ .person.name }"
-              }
-           },
-           "actionDataFilter": {
-              "results": "${ .greeting }"
-           }
+            "id": "greeting",
+            "version": "1.0",
+            "specVersion": "0.8",
+            "name": "Greeting Workflow",
+            "description": "Greet Someone",
+            "start": "Greet",
+            "functions": [
+                {
+                    "name": "greetingFunction",
+                    "operation": "flyte.src.tasks.custom_taks#greeting",
+                    "type": "custom"
+                }
+            ],
+            "states": [
+                {
+                    "name": "Greet",
+                    "type": "operation",
+                    "actions": [
+                        {
+                            "functionRef": {
+                                "refName": "greetingFunction",
+                                "arguments": "${ {name: .person.name } }"
+                            },
+                            "actionDataFilter": {
+                                "results": "${ {greeting: .greeting} }"
+                            }
+                        }
+                    ],
+                    "end": True
+                }
+            ]
         }
-     ],
-     "end": True
-  }
-]
-}
+  data: {
+            "person": {
+                "name": "John"
+            }
+        }
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
 version: v1
-workflow: flyte.serverlessworkflow.src.main.swf
+workflow: flyte.src.main.swf

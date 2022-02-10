@@ -17,4 +17,4 @@ done
 echo "Using tag=${TAG}"
 
 
-pyflyte --pkgs flyte.workflows package --image ${TAG}  --force #--fast
+pyflyte --pkgs flyte.src package --image ${TAG}  --force #--fast
