@@ -1,35 +1,32 @@
 import json
 import os
 import unittest
+from os import listdir
 
 from flyte.src.main import swf
 
 
-class TestWorkflow(unittest.TestCase):
-
-    def test_helloworld(self):
-        wf = self.read_file_as_json('helloworld.json')
-        expected = {
-            "result": "Hello World!"
-        }
-        self.assertEqual(expected, swf(wf=wf))
-
-    def test_load_tasks(self):
-        wf = self.read_file_as_json('greeting.json')
-        data_input = {
-            "person": {
-                "name": "John"
-            }
-        }
-        result = swf(wf=wf, data=data_input)
-        expected = {
-            "greeting": "Welcome to Serverless Workflow, John!"
-        }
-        self.assertEqual(expected, result)
-
-    def read_file_as_json(self, file):
-        wf_file = os.path.join(os.path.dirname(__file__), './', file)
+class Test:
+    def __init__(self, directory: str, file: str):
+        wf_file = os.path.join(os.path.dirname(__file__), directory, file)
 
         with open(wf_file, "r") as swf_file:
-            wf = swf_file.read()
-        return json.loads(wf)
+            test = json.loads(swf_file.read())
+            self.workflow = test["workflow"]
+            self.input_data = test["input_data"]
+            self.expected_result = test["expected_result"]
+
+
+class TestWorkflow(unittest.TestCase):
+
+    def test_load_tasksjespin(self):
+        data_set_dir = './data_set/'
+        examples_dir = os.path.join(os.path.dirname(__file__), data_set_dir)
+        data_sets = [x for x in listdir(examples_dir) if x.endswith(".json")]
+        self.assertEqual(len(data_sets), 2)
+
+        for file_name in data_sets:
+            test: Test = Test(data_set_dir, file_name)
+            result = swf(wf=test.workflow, data=test.input_data)
+
+            self.assertEqual(test.expected_result, result, "Error testing...")
