@@ -27,7 +27,7 @@
         "type": "foreach",
         "inputCollection": "${ .expressions }",
         "iterationParam": "singleexpression",
-        "outputCollection": "${ .results }",
+        "outputCollection": "results",
         "actions": [
           {
             "functionRef": {
@@ -36,15 +36,12 @@
             }
           }
         ],
-        "stateDataFilter": {
-          "output": "${ .results }"
-        },
         "end": true
       }
     ]
   },
   "expected_result": {
-    "result": [
+    "results": [
       4.0,
       3.0,
       30.0,

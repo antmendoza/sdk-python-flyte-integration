@@ -27,7 +27,8 @@ class TestWorkflow(unittest.TestCase):
         self.assertEqual(len(data_sets), 3)
 
         for file_name in data_sets:
-            test: Test = Test(data_set_dir, file_name)
-            result = swf(wf=test.workflow, data=test.input_data)
+            with self.subTest(f"test_{file_name}"):
+                test: Test = Test(data_set_dir, file_name)
+                result = swf(wf=test.workflow, data=test.input_data)
 
-            self.assertEqual(test.expected_result, result, f"Error testing: {file_name}")
+                self.assertEqual(test.expected_result, result, f"Error testing: {file_name}")

@@ -52,17 +52,20 @@ def foreach_state(context: Context, state: ForEachState, data: dict):
 
     result = [];
     for input_ in input_data:
-
         input_ = {
             state.iterationParam: input_
         }
 
         function_argument = JQ(action.functionRef.arguments).execute(input_)
         function_invocation = function.invoke(function_argument)
-        invocation_result = JQ(state.outputCollection).execute(function_invocation)
-        result.append(invocation_result)
+        # invocation_result = JQ(state.outputCollection).execute(function_invocation)
+        result.append(function_invocation)
 
-    return {"result": result}
+    state_output = {
+        state.outputCollection: result
+    }
+
+    return state_output
 
 
 @dynamic

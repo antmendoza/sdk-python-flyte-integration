@@ -5,4 +5,4 @@ def greeting(data: dict):
 
 
 def solveMathExpression(data: dict):
-    return {"results": eval(data["expression"])}
+    return eval(data["expression"])
