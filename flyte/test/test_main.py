@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import os
 import unittest
@@ -6,6 +7,7 @@ from os import listdir
 from flyte.src.main import swf
 
 
+@dataclasses.dataclass
 class Test:
     def __init__(self, directory: str, file: str):
         wf_file = os.path.join(os.path.dirname(__file__), directory, file)
@@ -19,7 +21,7 @@ class Test:
 
 class TestWorkflow(unittest.TestCase):
 
-    def test_load_tasksjespin(self):
+    def test_data_set(self):
         data_set_dir = './data_set/'
         examples_dir = os.path.join(os.path.dirname(__file__), data_set_dir)
         data_sets = [x for x in listdir(examples_dir) if x.endswith(".json")]
@@ -29,4 +31,4 @@ class TestWorkflow(unittest.TestCase):
             test: Test = Test(data_set_dir, file_name)
             result = swf(wf=test.workflow, data=test.input_data)
 
-            self.assertEqual(test.expected_result, result, "Error testing...")
+            self.assertEqual(test.expected_result, result, f"Error testing: {file_name}")
