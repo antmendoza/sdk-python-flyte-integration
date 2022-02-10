@@ -4,7 +4,7 @@ from flyte.src.custom_function import CustomFunction
 
 
 def task1(data: dict):
-    return "Hello "+ data["name"];
+    return "Hello " + data["name"];
 
 
 class TestCustomFunction(TestCase):

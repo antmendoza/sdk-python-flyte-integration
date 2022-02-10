@@ -4,6 +4,7 @@ from flytekit import dynamic, workflow
 from serverlessworkflow.sdk.action import Action
 from serverlessworkflow.sdk.function import Function
 from serverlessworkflow.sdk.inject_state import InjectState
+from serverlessworkflow.sdk.foreach_state import ForEachState
 from serverlessworkflow.sdk.operation_state import OperationState
 from serverlessworkflow.sdk.state import State
 from serverlessworkflow.sdk.workflow import Workflow
@@ -28,7 +29,6 @@ def operation_state(context: Context, state: OperationState, data: dict):
 
         function_invocation = function.invoke(arguments)
 
-
         if action.actionDataFilter:
             function_invocation = JQ(action.actionDataFilter.results).execute(function_invocation)
 
@@ -40,6 +40,29 @@ def operation_state(context: Context, state: OperationState, data: dict):
 def inject_state(context: Context, state: InjectState, data: dict):
     inject_result = state.data
     return inject_result
+
+
+def foreach_state(context: Context, state: ForEachState, data: dict):
+    input_data = JQ(state.inputCollection).execute(data)
+
+    # TODO iterate over actions
+    action = state.actions[0]
+    ref_name = action.functionRef.refName
+    function: CustomFunction = FunctionFactory(context.functions, ref_name).build()
+
+    result = [];
+    for input_ in input_data:
+
+        input_ = {
+            state.iterationParam: input_
+        }
+
+        function_argument = JQ(action.functionRef.arguments).execute(input_)
+        function_invocation = function.invoke(function_argument)
+        invocation_result = JQ(state.outputCollection).execute(function_invocation)
+        result.append(invocation_result)
+
+    return {"result": result}
 
 
 @dynamic
@@ -59,8 +82,12 @@ def execute_swf(wf: dict, data: dict) -> dict:
         for state in wf_object.states:
             if state.type == 'inject':
                 result.update(inject_state(context, state, data))
-            if state.type == 'operation':
+            elif state.type == 'operation':
                 result.update(operation_state(context, state, data))
+            elif state.type == 'foreach':
+                result.update(foreach_state(context, state, data))
+            else:
+                raise Exception(f"state {state.type} not supported")
 
     return result
 
