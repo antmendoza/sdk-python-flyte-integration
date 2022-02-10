@@ -1,6 +1,13 @@
-iamRoleARN: ""
-inputs:
-  wf: {
+{
+  "input_data": {
+    "expressions": [
+      "2+2",
+      "4-1",
+      "10*3",
+      "20/2"
+    ]
+  },
+  "workflow": {
     "id": "solvemathproblems",
     "version": "1.0",
     "specVersion": "0.8",
@@ -10,7 +17,7 @@ inputs:
     "functions": [
       {
         "name": "solveMathExpressionFunction",
-        "operation": "flyte.src.tasks.custom_taks#solveMathExpression",
+        "operation": "flyte.src.tasks.math#solveMathExpression",
         "type": "custom"
       }
     ],
@@ -32,17 +39,15 @@ inputs:
         "end": true
       }
     ]
+  },
+  "expected_result": {
+    "results": [
+      4.0,
+      3.0,
+      30.0,
+      10.0
+    ]
   }
-  data: {
-  "expressions": [
-      "2+2",
-      "4-1",
-      "10*3",
-      "20/2"
-  ]
 }
-kubeServiceAcct: ""
-targetDomain: ""
-targetProject: ""
-version: v2
-workflow: flyte.src.main.swf
+
+

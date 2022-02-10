@@ -1,82 +1,33 @@
+import json
+import os
 import unittest
-
-from jsonpath_ng import parse
+from os import listdir
 
 from flyte.src.main import swf
 
 
+class Test:
+    def __init__(self, directory: str, file: str):
+        wf_file = os.path.join(os.path.dirname(__file__), directory, file)
+
+        with open(wf_file, "r") as swf_file:
+            test = json.loads(swf_file.read())
+            self.workflow = test["workflow"]
+            self.input_data = test["input_data"]
+            self.expected_result = test["expected_result"]
+
+
 class TestWorkflow(unittest.TestCase):
 
-    def test_helloworld(self):
-        result = swf(wf={
-            "id": "helloworld",
-            "version": "1.0",
-            "specVersion": "0.8",
-            "name": "Hello World Workflow",
-            "description": "Inject Hello World",
-            "start": "Hello State",
-            "states": [
-                {
-                    "name": "Hello State",
-                    "type": "inject",
-                    "data": {
-                        "result": "Hello World!"
-                    },
-                    "end": True
-                }
-            ]
-        })
+    def test_data_set(self):
+        data_set_dir = './data_set/'
+        examples_dir = os.path.join(os.path.dirname(__file__), data_set_dir)
+        data_sets = [x for x in listdir(examples_dir) if x.endswith(".json")]
+        self.assertEqual(len(data_sets), 4)
 
-        expected = {
-            "result": "Hello World!"
-        }
-        self.assertEqual(expected, result)
+        for file_name in data_sets:
+            with self.subTest(f"test_{file_name}"):
+                test: Test = Test(data_set_dir, file_name)
+                result = swf(wf=test.workflow, data=test.input_data)
 
-    def test_load_tasks(self):
-        wf = {
-            "id": "greeting",
-            "version": "1.0",
-            "specVersion": "0.8",
-            "name": "Greeting Workflow",
-            "description": "Greet Someone",
-            "start": "Greet",
-            "functions": [
-                {
-                    "name": "greetingFunction",
-                    "operation": "flyte.src.tasks.custom_taks#greeting",
-                    "type": "custom"
-                }
-            ],
-            "states": [
-                {
-                    "name": "Greet",
-                    "type": "operation",
-                    "actions": [
-                        {
-                            "functionRef": {
-                                "refName": "greetingFunction",
-                                "arguments": "${ {name: .person.name } }"
-                            },
-                            "actionDataFilter": {
-                                "results": "${ {greeting: .greeting} }"
-                            }
-                        }
-                    ],
-                    "end": True
-                }
-            ]
-        }
-
-        data = {
-            "person": {
-                "name": "John"
-            }
-        }
-
-        result = swf(wf=wf, data=data)
-
-        expected = {
-            "greeting": "Welcome to Serverless Workflow, John!"
-        }
-
-        self.assertEqual(expected, result)
+                self.assertEqual(test.expected_result, result, f"Error testing: {file_name}")
