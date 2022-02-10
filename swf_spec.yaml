@@ -1,41 +1,48 @@
 iamRoleARN: ""
 inputs:
   wf: {
-"id": "greeting",
-"version": "1.0",
-"specVersion": "0.8",
-"name": "Greeting Workflow",
-"description": "Greet Someone",
-"start": "Greet",
-"functions": [
-  {
-     "name": "greetingFunction",
-     "operation": "file://myapis/greetingapis.json#greeting"
+    "id": "solvemathproblems",
+    "version": "1.0",
+    "specVersion": "0.8",
+    "name": "Solve Math Problems Workflow",
+    "description": "Solve math problems",
+    "start": "Solve",
+    "functions": [
+      {
+        "name": "solveMathExpressionFunction",
+        "operation": "flyte.src.tasks.custom_taks#solveMathExpression",
+        "type": "custom"
+      }
+    ],
+    "states": [
+      {
+        "name": "Solve",
+        "type": "foreach",
+        "inputCollection": "${ .expressions }",
+        "iterationParam": "singleexpression",
+        "outputCollection": "results",
+        "actions": [
+          {
+            "functionRef": {
+              "refName": "solveMathExpressionFunction",
+              "arguments": "${ {expression: .singleexpression} }"
+            }
+          }
+        ],
+        "end": true
+      }
+    ]
   }
-],
-"states":[
-  {
-     "name":"Greet",
-     "type":"operation",
-     "actions":[
-        {
-           "functionRef": {
-              "refName": "greetingFunction",
-              "arguments": {
-                "name": "${ .person.name }"
-              }
-           },
-           "actionDataFilter": {
-              "results": "${ .greeting }"
-           }
-        }
-     ],
-     "end": True
-  }
-]
+  data: {
+  "expressions": [
+      "2+2",
+      "4-1",
+      "10*3",
+      "20/2"
+  ]
 }
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
-version: v1
-workflow: flyte.serverlessworkflow.src.main.swf
+version: v2
+workflow: flyte.src.main.swf
