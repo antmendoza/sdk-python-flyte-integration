@@ -1,0 +1,33 @@
+{
+  "id": "greeting",
+  "version": "1.0",
+  "specVersion": "0.8",
+  "name": "Greeting Workflow",
+  "description": "Greet Someone",
+  "start": "Greet",
+  "functions": [
+    {
+      "name": "greetingFunction",
+      "operation": "flyte.src.tasks.custom_taks#greeting",
+      "type": "custom"
+    }
+  ],
+  "states": [
+    {
+      "name": "Greet",
+      "type": "operation",
+      "actions": [
+        {
+          "functionRef": {
+            "refName": "greetingFunction",
+            "arguments": "${ {name: .person.name } }"
+          },
+          "actionDataFilter": {
+            "results": "${ {greeting: .greeting} }"
+          }
+        }
+      ],
+      "end": true
+    }
+  ]
+}
