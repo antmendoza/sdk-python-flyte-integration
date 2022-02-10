@@ -6,15 +6,32 @@ inputs:
     "specVersion": "0.8",
     "name": "Solve Math Problems Workflow",
     "description": "Solve math problems",
-    "start": "Solve",
+    "start": "RetrieveExpressions",
     "functions": [
       {
         "name": "solveMathExpressionFunction",
-        "operation": "flyte.src.tasks.custom_taks#solveMathExpression",
+        "operation": "flyte.src.tasks.math#solveMathExpression",
+        "type": "custom"
+      },
+      {
+        "name": "retrieveExpressions",
+        "operation": "flyte.src.tasks.math#retrieveExpressions",
         "type": "custom"
       }
     ],
     "states": [
+      {
+        "name": "RetrieveExpressions",
+        "type": "operation",
+        "actions": [
+          {
+            "functionRef": {
+              "refName": "retrieveExpressions"
+            }
+          }
+        ],
+        "transition": "Solve"
+      },
       {
         "name": "Solve",
         "type": "foreach",
@@ -33,16 +50,9 @@ inputs:
       }
     ]
   }
-  data: {
-  "expressions": [
-      "2+2",
-      "4-1",
-      "10*3",
-      "20/2"
-  ]
-}
+  data: {}
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
-version: v2
+version: v3
 workflow: flyte.src.main.swf

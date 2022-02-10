@@ -16,6 +16,6 @@ do
 done
 
 
-flytectl sandbox exec -- docker build --no-cache . --tag ${TAG}
+flytectl sandbox exec -- docker build . --tag ${TAG}
 
 echo "Docker image built with tag ${TAG}. You can use this image to run pyflyte package."

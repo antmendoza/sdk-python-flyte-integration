@@ -1,10 +1,10 @@
 {
   "input_data": {},
   "workflow": {
-    "id": "solvemathproblems",
+    "id": "solvemathproblems_retrieve_expressions",
     "version": "1.0",
     "specVersion": "0.8",
-    "name": "Solve Math Problems Workflow",
+    "name": "Solve Math Problems Workflow retrieving expressions",
     "description": "Solve math problems",
     "start": "RetrieveExpressions",
     "functions": [
