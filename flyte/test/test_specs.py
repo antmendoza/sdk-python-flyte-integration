@@ -6,7 +6,7 @@ from os import listdir
 from flyte.src.main import swf
 
 
-class DataSet:
+class Spec:
     def __init__(self, directory: str, file: str):
         wf_file = os.path.join(os.path.dirname(__file__), directory, file)
 
@@ -20,14 +20,14 @@ class DataSet:
 class TestWorkflow(unittest.TestCase):
 
     def test_data_set(self):
-        data_set_location = './data_set/'
-        data_set_dir = os.path.join(os.path.dirname(__file__), data_set_location)
-        data_set_files = listdir(data_set_dir)
-        self.assertEqual(len(data_set_files), 4)
+        specs_location = './specs/'
+        specs_dir = os.path.join(os.path.dirname(__file__), specs_location)
+        specs_files = listdir(specs_dir)
+        self.assertEqual(len(specs_files), 4)
 
-        for file_name in data_set_files:
+        for file_name in specs_files:
             with self.subTest(f"test_{file_name}"):
-                test: DataSet = DataSet(data_set_location, file_name)
-                result = swf(wf=test.workflow, data=test.input_data)
+                spec: Spec = Spec(specs_location, file_name)
+                result = swf(wf=spec.workflow, data=spec.input_data)
 
-                self.assertEqual(test.expected_result, result, f"Error testing: {file_name}")
+                self.assertEqual(spec.expected_result, result, f"Error testing: {file_name}")
