@@ -12,8 +12,8 @@ class Spec:
 
         with open(wf_file, "r") as swf_file:
             test = json.loads(swf_file.read())
-            self.workflow = test["workflow"]
-            self.input_data = test["input_data"]
+            self.workflow = test["wf"]
+            self.input_data = test["data"]
             self.expected_result = test["expected_result"]
 
 

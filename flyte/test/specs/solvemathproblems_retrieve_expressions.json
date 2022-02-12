@@ -1,6 +1,6 @@
 {
-  "input_data": {},
-  "workflow": {
+  "data": {},
+  "wf": {
     "id": "solvemathproblems_retrieve_expressions",
     "version": "1.0",
     "specVersion": "0.8",
