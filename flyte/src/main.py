@@ -24,11 +24,11 @@ def execute_swf(wf: dict, data: dict) -> dict:
     state: State
     if wf_object.states:
         for state in wf_object.states:
-            if state.type == 'inject':
+            if state.is_inject_state():
                 result = (inject_state(context, state, result))
-            elif state.type == 'operation':
+            elif state.is_operation_state():
                 result = (operation_state(context, state, result))
-            elif state.type == 'foreach':
+            elif state.is_foreach_state():
                 result = (foreach_state(context, state, result))
             else:
                 raise Exception(f"state {state.type} not supported")
