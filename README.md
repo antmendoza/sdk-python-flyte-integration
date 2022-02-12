@@ -7,13 +7,13 @@ Full support to the Serverless Workflow Specification is not provided.
 
 ## Execution
 
-The [`@workflow` function](./flyte/src/main.py) takes two parameters:
+The [`@workflow` function](./flyte/src/main.py) accepts two parameters:
 - `wf` the workflow we want to execute
 - `data` (optional) the initial workflow data
 
 
 ## Examples
-Examples of the supported workflows can be found here: [specs](./flyte/test/specs) 
+Examples of the tested workflows can be found here: [specs](./flyte/test/specs) 
 
 The [test_specs.py](./flyte/test/test_specs.py) test execute every spec file under the [specs](./flyte/test/specs) folder. 
 Each spec has three sections: 
