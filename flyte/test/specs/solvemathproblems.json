@@ -1,5 +1,5 @@
 {
-  "input_data": {
+  "data": {
     "expressions": [
       "2+2",
       "4-1",
@@ -7,7 +7,7 @@
       "20/2"
     ]
   },
-  "workflow": {
+  "wf": {
     "id": "solvemathproblems",
     "version": "1.0",
     "specVersion": "0.8",
