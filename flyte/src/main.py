@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import copy
+import json
 
 from flytekit import dynamic, workflow
-from serverlessworkflow.sdk.function import Function
 from serverlessworkflow.sdk.state import State
 from serverlessworkflow.sdk.workflow import Workflow
 
-from flyte.src.context import Context
 from flyte.src.states import inject_state, operation_state, foreach_state
 
 
@@ -20,19 +19,17 @@ def execute_swf(wf: dict, data: dict) -> dict:
 
     state_data = copy.copy(data)
 
-    functions: [Function] = wf_object.functions
-
-    context = Context(functions=functions)
     state: State
     if wf_object.states:
         for state in wf_object.states:
             input_state_data = copy.deepcopy(state_data)
+            raw_state = to_dict(state)
             if state.is_inject_state():
-                state_data = inject_state(context=context, state=state, input_data=input_state_data)
+                state_data = inject_state(wf=wf, state=raw_state, input_data=input_state_data)
             elif state.is_operation_state():
-                state_data = operation_state(context=context, state=state, input_data=input_state_data)
+                state_data = operation_state(wf=wf, state=raw_state, input_data=input_state_data)
             elif state.is_foreach_state():
-                state_data = foreach_state(context=context, state=state, input_data=input_state_data)
+                state_data = foreach_state(wf=wf, state=raw_state, input_data=input_state_data)
             else:
                 raise Exception(f"state {state.type} not supported")
 
@@ -48,3 +45,7 @@ def swf(wf: dict, data: dict = {}) -> dict:
     - data: the initial workflow data
     """
     return execute_swf(wf=wf, data=copy.deepcopy(data))
+
+
+def to_dict(obj):
+    return json.loads(json.dumps(obj, default=lambda o: o.__dict__))

@@ -54,5 +54,5 @@ inputs:
 kubeServiceAcct: ""
 targetDomain: ""
 targetProject: ""
-version: v3
+version: v6
 workflow: flyte.src.main.swf
