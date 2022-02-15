@@ -22,14 +22,13 @@ def execute_swf(wf: dict, data: dict) -> dict:
     state: State
     if wf_object.states:
         for state in wf_object.states:
-            input_state_data = copy.deepcopy(state_data)
             raw_state = to_dict(state)
             if state.is_inject_state():
-                state_data = inject_state(wf=wf, state=raw_state, input_data=input_state_data)
+                state_data = inject_state(wf=wf, state=raw_state, input_data=state_data)
             elif state.is_operation_state():
-                state_data = operation_state(wf=wf, state=raw_state, input_data=input_state_data)
+                state_data = operation_state(wf=wf, state=raw_state, input_data=state_data)
             elif state.is_foreach_state():
-                state_data = foreach_state(wf=wf, state=raw_state, input_data=input_state_data)
+                state_data = foreach_state(wf=wf, state=raw_state, input_data=state_data)
             else:
                 raise Exception(f"state {state.type} not supported")
 
