@@ -15,9 +15,8 @@ from flyte.src.function_factory import FunctionFactory
 from flyte.src.tools.jq import JQ
 
 
-#@task()
+@task
 def operation_state(wf: dict, state: dict, input_data: dict) -> dict:
-
     context = build_context(wf)
 
     state_data = copy.deepcopy(input_data)
@@ -38,17 +37,15 @@ def operation_state(wf: dict, state: dict, input_data: dict) -> dict:
     return result
 
 
-
-#@task()
+@task
 def inject_state(wf: dict, state: dict, input_data: dict) -> dict:
     inject_result = InjectState(**state).data
     return inject_result
 
 
-#@task()
+@task
 def foreach_state(wf: dict, state: dict, input_data: dict) -> dict:
     context = build_context(wf)
-
 
     state_data = copy.deepcopy(input_data)
 
@@ -79,21 +76,21 @@ def foreach_state(wf: dict, state: dict, input_data: dict) -> dict:
     return state_output
 
 
-def apply_action_data_filter(action: Action, data: dict):
+def apply_action_data_filter(action: Action, data: dict) -> dict:
     if action.actionDataFilter:
         return JQ(action.actionDataFilter.results).execute(data)
     return data
 
 
-def invocation_arguments(action, data):
+def invocation_arguments(action, data) -> dict:
     arguments = None
     if action.functionRef.arguments:
         arguments = JQ(action.functionRef.arguments).execute(data)
     return arguments
 
-def build_context(wf):
+
+def build_context(wf) -> Context:
     wf_object: Workflow = Workflow.from_source(str(wf))
     functions = wf_object.functions
     context = Context(functions=functions)
     return context
-

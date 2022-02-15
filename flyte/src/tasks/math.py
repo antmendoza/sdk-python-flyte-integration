@@ -1,8 +1,8 @@
-def solveMathExpression(data: dict):
+def solveMathExpression(data: dict) -> dict:
     return eval(data["expression"])
 
 
-def retrieveExpressions(data: dict):
+def retrieveExpressions(data: dict) -> dict:
     return {
         "expressions": [
             "2+2",
