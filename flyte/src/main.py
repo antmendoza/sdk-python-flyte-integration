@@ -18,7 +18,7 @@ def execute_swf(wf: dict, data: dict) -> dict:
 
     wf_object: Workflow = Workflow.from_source(str(wf))
 
-    result = data
+    state_data = copy.copy(data)
 
     functions: [Function] = wf_object.functions
 
@@ -26,16 +26,17 @@ def execute_swf(wf: dict, data: dict) -> dict:
     state: State
     if wf_object.states:
         for state in wf_object.states:
+            input_state_data = copy.deepcopy(state_data)
             if state.is_inject_state():
-                result = inject_state(context, state, result)
+                state_data = inject_state(context=context, state=state, input_data=input_state_data)
             elif state.is_operation_state():
-                result = operation_state(context, state, result)
+                state_data = operation_state(context=context, state=state, input_data=input_state_data)
             elif state.is_foreach_state():
-                result = foreach_state(context, state, result)
+                state_data = foreach_state(context=context, state=state, input_data=input_state_data)
             else:
                 raise Exception(f"state {state.type} not supported")
 
-    return result
+    return state_data
 
 
 @workflow
