@@ -23,7 +23,7 @@ Each spec has three sections:
 
 You can run any of the examples into flyte by providing the `wf` and `data` parameters.
 
-[swf_spec.yaml](./swf_spec.yaml)
+[swf_spec.yaml](./solvemathproblems.yaml)
 
 ```
 inputs:
