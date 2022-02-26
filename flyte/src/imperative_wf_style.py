@@ -16,18 +16,26 @@ import typing
 
 from flytekit import Workflow, task, workflow
 
-
 # %%
 # Assume we have the following tasks, and they are meant to represent more complicated tasks. ``t1`` has simple scalar I/O, ``t2`` is
 # a pure side effect task (though we typically don't recommend these, they are inevitable), and ``t3`` takes in a list
 # as an input.
-@task
+from flytekit.core.node import Node
+from flytekit.core.workflow import ImperativeWorkflow
+
+
+@task()
 def t1(a: str) -> str:
     return a + " world"
 
 
 @task
-def t2():
+def t4(a: str) -> str:
+    return a + " world"
+
+
+@task
+def t2(b: typing.List[str]):
     print("side effect")
 
 
@@ -40,11 +48,12 @@ def t3(a: typing.List[str]) -> str:
     return ",".join(a)
 
 
-
-
 # %%
 # Start by creating an imperative style workflow, which is aliased to just ``Workflow`` from ``flytekit``
-wb = Workflow(name="my.imperative.workflow.example")
+wb: ImperativeWorkflow = ImperativeWorkflow(name="my.imperative.workflow.example")
+
+
+
 
 # %%
 # Inputs have to be added to the workflow before they can be used. Add them by specifying the name and the type.
@@ -52,16 +61,20 @@ wb.add_workflow_input("in1", str)
 
 # %%
 # Next associate a task, and pass in the workflow level input.
-node_t1 = wb.add_entity(t1, a=wb.inputs["in1"])
+node_t1: Node = wb.add_entity(t1, a=wb.inputs["in1"])
+
+
+
 
 # %%
 # Create a workflow output linked to the output of that task.
-wb.add_workflow_output("output_from_t1", node_t1.outputs["o0"])
+#wb.add_workflow_output("output_from_t1", node_t1.outputs["o0"])
 
 # %%
 # To add a task that has no inputs or outputs, just add the entity. We don't need to capture the resulting node
 # because we have no use for it.
-wb.add_entity(t2)
+
+wb.add_entity(t2, b=[node_t1.outputs["o0"]])
 
 # %%
 # We can also pass in a list to a task. Also creating a workflow input returns an object that can be used as an
@@ -73,12 +86,11 @@ node_t3 = wb.add_entity(t3, a=[wb.inputs["in1"], wf_in2])
 # You can also create a workflow input as a list from multiple task outputs
 wb.add_workflow_output(
     "output_list",
-    [node_t1.outputs["o0"], node_t3.outputs["o0"]],
+    [ node_t3.outputs["o0"]],
     python_type=typing.List[str],
 )
 
 
-
-
 if __name__ == "__main__":
-    print(swf)
+    print(wb)
+    print(wb(in1="hello", in2="foo"))
