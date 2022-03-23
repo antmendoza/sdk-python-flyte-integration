@@ -1,4 +1,4 @@
 flytekit>=0.20.0
--e git+https://github.com/antmendoza/sdk-python.git@load_types#egg=serverlessworkflow.sdk
+-e git+https://github.com/serverlessworkflow/sdk-python.git@main#egg=serverlessworkflow.sdk
 #/Users/antmendoza/personal/sdk-python
 jq
