@@ -14,11 +14,10 @@ class TestJsonPath(TestCase):
         }
         self.assertEqual("John", JQ(expression).executeString(data))
 
-
     def test_jq_dict(self):
         expression = {
-                "name": "${ .person.name }"
-              }
+            "name": "${ .person.name }"
+        }
         data = {
             "person": {
                 "name": "John"
