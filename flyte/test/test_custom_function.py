@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from flyte.src.custom_function import CustomFunction
 
-
 def task1(data: dict):
     return "Hello " + data["name"];
 

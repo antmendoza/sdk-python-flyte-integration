@@ -12,4 +12,4 @@ class TestJsonPath(TestCase):
                 "name": "John"
             }
         }
-        self.assertEqual("John", JQ(expression).execute(data))
+        self.assertEqual("John", JQ(expression).executeDict(data))

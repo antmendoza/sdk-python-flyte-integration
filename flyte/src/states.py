@@ -51,7 +51,7 @@ def foreach_state(wf: dict, state: dict, input_data: dict) -> dict:
 
     f_state = ForEachState(**state)
 
-    foreach_input_data = JQ(f_state.inputCollection).execute(state_data)
+    foreach_input_data = JQ(f_state.inputCollection).executeDict(state_data)
 
     # TODO iterate over actions
     action = f_state.actions[0]
@@ -78,14 +78,14 @@ def foreach_state(wf: dict, state: dict, input_data: dict) -> dict:
 
 def apply_action_data_filter(action: Action, data: dict) -> dict:
     if action.actionDataFilter:
-        return JQ(action.actionDataFilter.results).execute(data)
+        return JQ(action.actionDataFilter.results).executeString(data)
     return data
 
 
 def invocation_arguments(action, data) -> dict:
     arguments = None
     if action.functionRef.arguments:
-        arguments = JQ(action.functionRef.arguments).execute(data)
+        arguments = JQ(action.functionRef.arguments).executeDict(data)
     return arguments
 
 

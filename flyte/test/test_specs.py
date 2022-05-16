@@ -23,7 +23,7 @@ class TestWorkflow(unittest.TestCase):
         specs_location = './specs/'
         specs_dir = os.path.join(os.path.dirname(__file__), specs_location)
         specs_files = listdir(specs_dir)
-        self.assertEqual(len(specs_files), 4)
+        self.assertEqual(len(specs_files), 2)
 
         for file_name in specs_files:
             with self.subTest(f"test_{file_name}"):
